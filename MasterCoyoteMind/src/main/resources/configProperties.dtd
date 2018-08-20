@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!ELEMENT properties (nbrdecases, nbressais, nbrdecouleurs, dev)>
+
+<!-- 8 max pour des raisons de capacité mémoire ( 8 = +- 10go RAM )  -->
+<!ELEMENT nbrdecases EMPTY>
+<!ATTLIST nbrdecases value (1|2|3|4|5|6|7|8) #REQUIRED>
+
+<!ELEMENT nbressais EMPTY>
+<!ATTLIST nbressais value (1|2|3|4|5|6|7|8|9|10|11|12|13|14|15|16|17|18|19|20) #REQUIRED>
+
+<!ELEMENT nbrdecouleurs EMPTY>
+<!ATTLIST nbrdecouleurs value (4|5|6|7|8|9|10) #REQUIRED>
+
+<!ELEMENT dev EMPTY>
+<!ATTLIST dev value (true|false) #REQUIRED>

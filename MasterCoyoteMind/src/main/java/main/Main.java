@@ -20,6 +20,7 @@ import java.util.Locale;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 
+import config.ImportConfig;
 import jeu.JeuMasterMind;
 import jeu.JeuRecherche;
 
@@ -53,17 +54,17 @@ public class Main {
 	 */
 	private static int mode;
 	/**
-	 * Détermine le nombre de cases du plateau de jeu.
+	 * Détermine le nombre de cases du plateau de jeu. {1..8}
 	 */
 	private static int nbrDeCases;
 	/**
-	 * Détermine le nombre d'essais autorisés pour découvrir la suite adverse.
+	 * Détermine le nombre d'essais autorisés pour découvrir la suite adverse. {1..20}
 	 */
 	private static int nbrEssais;
 	/**
 	 * Détermine le nombre de couleurs possibles, 
 	 * c'est à dire ici les chiffres utilisables. 
-	 * De 4 à 10.
+	 * {4..10}
 	 */
 	private static int nbrDeCouleurs;
 	/**
@@ -130,12 +131,15 @@ public class Main {
 	 */
 	public static void importConfig() {
 
-		nbrDeCases = 4;
-		nbrEssais = 10;
-		nbrDeCouleurs = 4;
-		dev = true;
-
-		//TODO Le faire depuis un fichier XML.
+		// Création de l'objet dédié au XML
+		ImportConfig impConf = new ImportConfig();
+		impConf.init();
+		
+		// Correspondance des attribus
+		nbrDeCases = impConf.getNbrDeCases();
+		nbrEssais = impConf.getNbrEssais();
+		nbrDeCouleurs = impConf.getNbrDeCouleurs();
+		dev = impConf.isDev();
 
 	}
 

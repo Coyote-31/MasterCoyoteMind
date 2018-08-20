@@ -193,7 +193,7 @@ public class MasterMindDuel extends AbstractModeDuel {
 		boolean loopPartie = true;
 		int compteurDeManche = nbrEssais;
 
-		// Déroulement de la partie et test du nombre de manches restantes
+		// Déroulement de la partie et test du nombre de manches restantes à l'avantage du joueur.
 		do {
 			System.out.println("_____________________________________");
 			System.out.println("\n" + compteurDeManche + " essai(s) restant(s).");
