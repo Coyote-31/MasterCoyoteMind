@@ -19,6 +19,9 @@ package jeu;
 import java.util.Locale;
 import java.util.Scanner;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import main.Main;
 import mode.AbstractMode;
 import mode.mastermind.MasterMindChallenger;
@@ -85,6 +88,14 @@ public abstract class AbstractJeu {
 	 * @see MasterMindDuel
 	 */
 	protected AbstractMode modeDeJeu;
+	/**
+	 * Création de l'objet Logger permettant la gestion des logs de l'application.
+	 */
+	private static final Logger LOG = LogManager.getLogger();
+	/**
+	 * String de constante pour les erreurs d'entrées clavier de l'utilisateur.
+	 */
+	private static final String ERRORUSER = "Erreur entrée clavier utilisateur";
 	
 	
 	/**
@@ -149,10 +160,12 @@ public abstract class AbstractJeu {
 					
 				} else {
 					System.err.println("\n Veuillez rentrer 'o' pour oui ou 'n' pour non !");
+					LOG.error(ERRORUSER);
 				}
 				
 			} catch (Exception e) {
 				System.err.println("\n Veuillez rentrer 'o' pour oui ou 'n' pour non !");
+				LOG.error(ERRORUSER, e);
 				
 			} finally {
 				scan.nextLine();

@@ -76,7 +76,7 @@ public abstract class AbstractModeDuel extends AbstractMode {
 		 * Variable qui lorsque la partie est gagné par l'IA est à true.
 		 */
 		protected boolean victoireIA;
-	
+
 	
 	/**
 	 * Constructeur qui fait suivre les valeurs de configuration.

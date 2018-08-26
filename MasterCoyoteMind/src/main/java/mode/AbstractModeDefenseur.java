@@ -18,6 +18,9 @@ package mode;
 
 import java.util.Arrays;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import main.Main;
 import mode.mastermind.MasterMindDefenseur;
 import mode.recherche.RechercheDefenseur;
@@ -57,6 +60,10 @@ public abstract class AbstractModeDefenseur extends AbstractMode {
 	 * Variable qui lorsque la partie est gagné par l'IA est à true.
 	 */
 	protected boolean victoireIA;
+	/**
+	 * Création de l'objet Logger permettant la gestion des logs de l'application.
+	 */
+	private static final Logger LOG = LogManager.getLogger();
 	
 	
 	/**
@@ -145,9 +152,12 @@ public abstract class AbstractModeDefenseur extends AbstractMode {
 
 		if (victoireIA) {
 			System.out.println("\nDommage ! L'ordinateur a trouvé la bonne combinaison ! ");
+			LOG.info("Victoire joueur : Mode Defenseur");
 			
 		} else if (!loopPartie) {
 			System.out.println("\nBravo ! L'ordinateur a perdu !");
+			LOG.info("Victoire IA : Mode Defenseur");
+			
 		}
 	}
 	

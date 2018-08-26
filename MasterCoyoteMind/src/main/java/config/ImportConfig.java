@@ -14,11 +14,12 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.xml.sax.ErrorHandler;
 import org.xml.sax.SAXException;
-import org.xml.sax.SAXParseException;
 
 /**
  * Classe qui charge les configurations depuis le fichier <i>configProperties.xml</i>,
@@ -57,6 +58,11 @@ public class ImportConfig {
 	 */
 	private static final String VALUE = "value";
 	
+	/**
+	 * Création de l'objet Logger permettant la gestion des logs de l'application.
+	 */
+	private static final Logger LOG = LogManager.getLogger();
+	
 	
 	/**
 	 * Constructeur qui attribut les valeurs par défaut.
@@ -66,7 +72,7 @@ public class ImportConfig {
 		nbrDeCases = 4;
 		nbrEssais = 10;
 		nbrDeCouleurs = 6;
-		dev = false;
+		dev = true;
 	}
 
 	/**
@@ -94,23 +100,17 @@ public class ImportConfig {
 			
 			importProperties(root);
 				
-		} catch (SAXParseException e){
+		} catch (ParserConfigurationException|SAXException|IOException e){
 			e.printStackTrace();
-			createFileXML();
-		} catch (ParserConfigurationException e) {
-			e.printStackTrace();
-			createFileXML();
-		} catch (SAXException e) {
-			e.printStackTrace();
-			createFileXML();
-		} catch (IOException e) {
-			e.printStackTrace();
+			LOG.error("XML import exception :", e);
 			createFileXML();
 		}      
 	}
 	
 	/**
 	 * Importe les valeurs depuis le fichier XML.
+	 * 
+	 * @param root : Element de base du fichier XML = <code>properties</code>
 	 */
 	public void importProperties(Element root) {
 		
@@ -153,25 +153,25 @@ public class ImportConfig {
 			Element eNbrDeCases = doc.createElement("nbrdecases");
 			rootElement.appendChild(eNbrDeCases);
 			// Attribut de l'element nbrdecases
-			eNbrDeCases.setAttribute(VALUE, "4");
+			eNbrDeCases.setAttribute(VALUE, Integer.toString(nbrDeCases));
 			
 			// Element : nbressais
 			Element eNbrEssais = doc.createElement("nbressais");
 			rootElement.appendChild(eNbrEssais);
 			// Attribut de l'element nbressais
-			eNbrEssais.setAttribute(VALUE, "10");
+			eNbrEssais.setAttribute(VALUE, Integer.toString(nbrEssais));
 			
 			// Element : nbrdecouleurs
 			Element eNbrDeCouleurs = doc.createElement("nbrdecouleurs");
 			rootElement.appendChild(eNbrDeCouleurs);
 			// Attribut de l'element nbrdecouleurs
-			eNbrDeCouleurs.setAttribute(VALUE, "6");
+			eNbrDeCouleurs.setAttribute(VALUE, Integer.toString(nbrDeCouleurs));
 			
 			// Element : dev
 			Element eDev = doc.createElement("dev");
 			rootElement.appendChild(eDev);
 			// Attribut de l'element dev
-			eDev.setAttribute(VALUE, "true");
+			eDev.setAttribute(VALUE, Boolean.toString(dev));
 			
 			
 			// Ecrit le contenu dans un fichier XML.
@@ -189,7 +189,8 @@ public class ImportConfig {
 
 			// Output vers la console pour debug :
 			if(dev) {
-				result = new StreamResult(System.out);
+				StreamResult resultSysOut = new StreamResult(System.out);
+				transformer.transform(source, resultSysOut);
 			}
 			
 			transformer.transform(source, result);
@@ -199,29 +200,56 @@ public class ImportConfig {
 			// Relance la phase d'initialisation
 			init();
 
-		} catch (ParserConfigurationException e) {
+		} catch (ParserConfigurationException|TransformerException e) {
 			e.printStackTrace();
-		} catch (TransformerException e) {
-			e.printStackTrace();
+			LOG.error("XML Create error :", e);
 		}
 
 	}
 
+	/**
+	 * Récupère la valeur de la variable <code>nbrDeCases</code>.
+	 * 
+	 * @return int : {1..8}
+	 * 
+	 * @see ImportConfig#nbrDeCases
+	 */
 	public int getNbrDeCases() {
 		
 		return nbrDeCases;
 	}
 	
+	/**
+	 * Récupère la valeur de la variable <code>nbrEssais</code>.
+	 * 
+	 * @return int : {1..20}
+	 * 
+	 * @see ImportConfig#nbrEssais
+	 */
 	public int getNbrEssais() {
 		
 		return nbrEssais;
 	}
 	
+	/**
+	 * Récupère la valeur de la variable <code>nbrDeCouleurs</code>.
+	 * 
+	 * @return int : {4..10}
+	 * 
+	 * @see ImportConfig#nbrDeCouleurs
+	 */
 	public int getNbrDeCouleurs() {
 		
 		return nbrDeCouleurs;
 	}
 	
+	/**
+	 * Récupère la valeur de la variable <code>dev</code>.
+	 * 
+	 * @return boolean : true = mode developpeur / false = mode normal.
+	 * 
+	 * @see ImportConfig#dev
+	 */
 	public boolean isDev() {
 		
 		return dev;

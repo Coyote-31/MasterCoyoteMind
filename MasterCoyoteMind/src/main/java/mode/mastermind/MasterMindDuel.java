@@ -21,6 +21,9 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.LinkedList;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import mode.AbstractMode;
 import mode.AbstractModeDuel;
 
@@ -60,6 +63,15 @@ public class MasterMindDuel extends AbstractModeDuel {
 	 * Stock la tentative pour la maj de la list de choix.
 	 */
 	private int[] tableauTestTentativeIA;
+	/**
+	 * Création de l'objet Logger permettant la gestion des logs de l'application.
+	 */
+	private static final Logger LOG = LogManager.getLogger();
+	/**
+	 * String de constante pour les erreurs d'entrées clavier de l'utilisateur.
+	 */
+	private static final String ERRORUSER = "Erreur entrée clavier utilisateur";
+	
 	
 	/**
 	 * Constructeur de <i>MasterMindDuel</i> qui fait suivre les valeurs de configuration.
@@ -136,17 +148,17 @@ public class MasterMindDuel extends AbstractModeDuel {
 					//convertion char => nombre
 					tableauCombinaisonIA[i] = Character.getNumericValue(scanCombinaison.charAt(i));
 					// Vérification que se sont des chiffres de 0 à nbrDeCouleurs-1.
-					for (int j = 0; j < tableauCombinaisonIA.length; j++) {
-						if (tableauCombinaisonIA[i] < 0 || tableauCombinaisonIA[i] > (nbrDeCouleurs-1)) {
-							throw new Exception();
-						}
+					if (tableauCombinaisonIA[i] < 0 || tableauCombinaisonIA[i] > (nbrDeCouleurs-1)) {
+						throw new Exception();
 					}
 				}
+				
 				loopTour = false;
 				
 			} catch (Exception e) {
 				System.err.println("\nErreur : Veuillez rentrer un nombre de " + nbrDeCases 
-						+ " chiffres de 0 à " + (nbrDeCouleurs-1) + " !\n");				
+						+ " chiffres de 0 à " + (nbrDeCouleurs-1) + " !\n");
+				LOG.error(ERRORUSER, e);
 
 			} finally {
 				scan.nextLine();
@@ -217,14 +229,17 @@ public class MasterMindDuel extends AbstractModeDuel {
 
 		if (victoire) {
 			System.out.println("\nBravo ! Vous avez trouvé la combinaison : " + Arrays.toString(tableauCombinaison));
+			LOG.info("Victoire joueur : MasterMind mode Duel");
 			
 		} else if (victoireIA) {
 			System.out.println("\nDommage ! Vous avez perdu...");
 			System.out.println("La bonne combinaison était : " + Arrays.toString(tableauCombinaison));
-		
+			LOG.info("Victoire IA : MasterMind mode Duel");
+			
 		} else {
 			System.out.println("\nEgalité ! Personne n'a trouvé la bonne combinaison !");
 			System.out.println("La bonne combinaison était : " + Arrays.toString(tableauCombinaison));
+			LOG.info("Egalité : MasterMind mode Duel");
 		}
 		
 	}
@@ -286,17 +301,17 @@ public class MasterMindDuel extends AbstractModeDuel {
 					tableauTentative[i] = Character.getNumericValue(scanTentative.charAt(i));
 
 					// Vérification que se sont des chiffres de 0 à nbrDeCouleurs-1
-					for (int j = 0; j < tableauTentative.length; j++) {
-						if (tableauTentative[i] < 0 || tableauTentative[i] > (nbrDeCouleurs-1)) {
-							throw new Exception();
-						}
+					if (tableauTentative[i] < 0 || tableauTentative[i] > (nbrDeCouleurs-1)) {
+						throw new Exception();
 					}
 				}
+				
 				loopTour = false;
 				
 			} catch (Exception e) {
 				System.err.println("\nErreur : Veuillez rentrer un nombre de "
-						+ nbrDeCases + " chiffres de 0 à "+ (nbrDeCouleurs-1) +" !\n");				
+						+ nbrDeCases + " chiffres de 0 à "+ (nbrDeCouleurs-1) +" !\n");
+				LOG.error(ERRORUSER, e);
 
 			} finally {
 				scan.nextLine();

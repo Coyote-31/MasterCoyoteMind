@@ -1,0 +1,1 @@
+packageSearchIndex = [{"l":"config"},{"l":"jeu"},{"l":"main"},{"l":"mode"},{"l":"mode.mastermind"},{"l":"mode.recherche"}]

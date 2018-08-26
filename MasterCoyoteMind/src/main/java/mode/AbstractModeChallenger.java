@@ -18,6 +18,9 @@ package mode;
 
 import java.util.Arrays;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import main.Main;
 import mode.mastermind.MasterMindChallenger;
 import mode.recherche.RechercheChallenger;
@@ -57,6 +60,10 @@ public abstract class AbstractModeChallenger extends AbstractMode {
 	 * Variable qui lorsque la partie est gagné par le joueur est à true.
 	 */
 	protected boolean victoire;
+	/**
+	 * Création de l'objet Logger permettant la gestion des logs de l'application.
+	 */
+	private static final Logger LOG = LogManager.getLogger();
 	
 	
 	/**
@@ -118,10 +125,12 @@ public abstract class AbstractModeChallenger extends AbstractMode {
 
 		if (victoire) {
 			System.out.println("\nBravo ! Vous avez trouvé la combinaison ! ");
+			LOG.info("Victoire joueur : Mode Challenger");
 			
 		} else if (!loopPartie) {
 			System.out.println("\nDommage ! Vous avez perdu... La bonne combinaison était : ");
 			System.out.println(Arrays.toString(tableauCombinaison));
+			LOG.info("Victoire IA : Mode Challenger");
 		}	
 	}
 

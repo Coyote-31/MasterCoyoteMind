@@ -74,7 +74,7 @@ public abstract class AbstractMode {
 	 * Détermine le nombre d'essais autorisés pour découvrir la suite adverse.
 	 */
 	protected int nbrEssais;
-
+	
 	
 	/**
 	 * Constructeur qui fait suivre les valeurs de configuration.

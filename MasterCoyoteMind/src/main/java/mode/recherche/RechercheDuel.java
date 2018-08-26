@@ -21,6 +21,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import main.Main;
 import mode.AbstractMode;
 import mode.AbstractModeDuel;
@@ -41,6 +44,14 @@ public class RechercheDuel extends AbstractModeDuel {
 	 * Tableau de listes de choix possibles pour les tentatives de l'IA.
 	 */
 	private ArrayList<Integer>[] tabListChoixRestantIA;
+	/**
+	 * Création de l'objet Logger permettant la gestion des logs de l'application.
+	 */
+	private static final Logger LOG = LogManager.getLogger();
+	/**
+	 * String de constante pour les erreurs d'entrées clavier de l'utilisateur.
+	 */
+	private static final String ERRORUSER = "Erreur entrée clavier utilisateur";
 	
 	
 	/**
@@ -60,7 +71,7 @@ public class RechercheDuel extends AbstractModeDuel {
 		super(nbrDeCases, nbrEssais);
 		
 		// Initialise le tableau de liste de choix de l'IA.
-		tabListChoixRestantIA = (ArrayList<Integer>[])new ArrayList[nbrDeCases];
+		tabListChoixRestantIA = new ArrayList[nbrDeCases];
 		for (int i = 0; i < tabListChoixRestantIA.length; i++) {
 			tabListChoixRestantIA[i] = new ArrayList<>();
 		}
@@ -136,14 +147,17 @@ public class RechercheDuel extends AbstractModeDuel {
 
 		if (victoire) {
 			System.out.println("\nBravo ! Vous avez trouvé la combinaison : " + Arrays.toString(tableauCombinaison));
+			LOG.info("Victoire joueur : Recherche mode Duel");
 			
 		} else if (victoireIA) {
 			System.out.println("\nDommage ! Vous avez perdu...");
 			System.out.println("La bonne combinaison était : " + Arrays.toString(tableauCombinaison));
-		
+			LOG.info("Victoire IA : Recherche mode Duel");
+			
 		} else {
 			System.out.println("\nEgalité ! Personne n'a trouvé la bonne combinaison !");
 			System.out.println("La bonne combinaison était : " + Arrays.toString(tableauCombinaison));
+			LOG.info("Egalité : Recherche mode Duel");
 		}
 		
 	}
@@ -207,17 +221,17 @@ public class RechercheDuel extends AbstractModeDuel {
 					tableauCombinaisonIA[i] = Character.getNumericValue(scanCombinaison.charAt(i));
 
 					// Vérification que se sont des chiffres de 0 à 9
-					for (int j = 0; j < tableauCombinaisonIA.length; j++) {
-						if (tableauCombinaisonIA[i] < 0 || tableauCombinaisonIA[i] > 9) {
-							throw new Exception();
-						}
+					if (tableauCombinaisonIA[i] < 0 || tableauCombinaisonIA[i] > 9) {
+						throw new Exception();
 					}
 				}
+				
 				loopTour = false;
 				
 			} catch (Exception e) {
 				System.err.println("\nErreur : Veuillez rentrer un nombre de " + nbrDeCases + " chiffres de 0 à 9 !\n");				
-
+				LOG.error(ERRORUSER, e);
+				
 			} finally {
 				scan.nextLine();
 			}
@@ -271,7 +285,7 @@ public class RechercheDuel extends AbstractModeDuel {
 				for (int i = 0; i < tableauTentative.length; i++) {
 
 					//convertion char => nombre en ASCII
-					tableauTentative[i] = ((int)scanTentative.charAt(i) - 48);
+					tableauTentative[i] = (scanTentative.charAt(i) - 48);
 
 					// Vérification que se sont des chiffres de 0 à 9
 					for (int j = 0; j < tableauTentative.length; j++) {
@@ -284,7 +298,8 @@ public class RechercheDuel extends AbstractModeDuel {
 				
 			} catch (Exception e) {
 				System.err.println("\nErreur : Veuillez rentrer un nombre de " + nbrDeCases + " chiffres de 0 à 9 !\n");				
-
+				LOG.error(ERRORUSER, e);
+				
 			} finally {
 				scan.nextLine();
 			}

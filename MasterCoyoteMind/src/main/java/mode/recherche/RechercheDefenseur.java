@@ -21,6 +21,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import main.Main;
 import mode.AbstractMode;
 import mode.AbstractModeDefenseur;
@@ -41,6 +44,14 @@ public class RechercheDefenseur extends AbstractModeDefenseur {
 	 * Tableau de listes de choix possibles pour les tentatives de l'IA.
 	 */
 	private ArrayList<Integer>[] tabListChoixRestantIA;
+	/**
+	 * Création de l'objet Logger permettant la gestion des logs de l'application.
+	 */
+	private static final Logger LOG = LogManager.getLogger();
+	/**
+	 * String de constante pour les erreurs d'entrées clavier de l'utilisateur.
+	 */
+	private static final String ERRORUSER = "Erreur entrée clavier utilisateur";
 	
 	
 	/**
@@ -60,7 +71,7 @@ public class RechercheDefenseur extends AbstractModeDefenseur {
 		super(nbrDeCases, nbrEssais);
 		
 		// Initialise le tableau de liste de choix de l'IA.
-		tabListChoixRestantIA = (ArrayList<Integer>[])new ArrayList[nbrDeCases];
+		tabListChoixRestantIA = new ArrayList[nbrDeCases];
 		for (int i = 0; i < tabListChoixRestantIA.length; i++) {
 			tabListChoixRestantIA[i] = new ArrayList<>();
 		}
@@ -71,6 +82,7 @@ public class RechercheDefenseur extends AbstractModeDefenseur {
 	 * 
 	 * @see AbstractModeDefenseur#tableauCombinaisonIA	 
 	 */
+	@Override
 	public void combinaisonDefinition() {
 
 		String scanCombinaison = null;
@@ -93,17 +105,17 @@ public class RechercheDefenseur extends AbstractModeDefenseur {
 					//convertion char => nombre
 					tableauCombinaisonIA[i] = Character.getNumericValue(scanCombinaison.charAt(i));
 					// Vérification que se sont des chiffres de 0 à 9
-					for (int j = 0; j < tableauCombinaisonIA.length; j++) {
-						if (tableauCombinaisonIA[i] < 0 || tableauCombinaisonIA[i] > 9) {
-							throw new Exception();
-						}
+					if (tableauCombinaisonIA[i] < 0 || tableauCombinaisonIA[i] > 9) {
+						throw new Exception();
 					}
 				}
+					
 				loopTour = false;
 				
 			} catch (Exception e) {
 				System.err.println("\nErreur : Veuillez rentrer un nombre de " + nbrDeCases + " chiffres de 0 à 9 !\n");				
-
+				LOG.error(ERRORUSER, e);
+				
 			} finally {
 				scan.nextLine();
 			}
@@ -114,6 +126,7 @@ public class RechercheDefenseur extends AbstractModeDefenseur {
 	/**
 	 * Décrit la tentative de l'IA pour trouver la combinaison.
 	 */
+	@Override
 	public void tourIA() {
 
 		if(dev) {
@@ -142,6 +155,7 @@ public class RechercheDefenseur extends AbstractModeDefenseur {
 	/**
 	 * Compare la tentative de l'IA avec la combinaison et affiche le résultat.
 	 */
+	@Override
 	public void testCombiIA() {
 
 		String resultat = "";
@@ -188,6 +202,7 @@ public class RechercheDefenseur extends AbstractModeDefenseur {
 	 * 
 	 * @see RechercheDefenseur#tabListChoixRestantIA
 	 */
+	@Override
 	public void initListChoix() {
 
 		for (int i = 0; i < tabListChoixRestantIA.length; i++) {

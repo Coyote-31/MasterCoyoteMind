@@ -18,6 +18,9 @@ package mode.recherche;
 
 import java.security.SecureRandom;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import main.Main;
 import mode.AbstractMode;
 import mode.AbstractModeChallenger;
@@ -33,6 +36,15 @@ import mode.AbstractModeChallenger;
  */
 public class RechercheChallenger extends AbstractModeChallenger {
 
+	/**
+	 * Création de l'objet Logger permettant la gestion des logs de l'application.
+	 */
+	private static final Logger LOG = LogManager.getLogger();
+	/**
+	 * String de constante pour les erreurs d'entrées clavier de l'utilisateur.
+	 */
+	private static final String ERRORUSER = "Erreur entrée clavier utilisateur";
+	
 	
 	/**
 	 * Constructeur qui fait suivre les valeurs de configuration.
@@ -75,6 +87,7 @@ public class RechercheChallenger extends AbstractModeChallenger {
 	 * 
 	 * @see AbstractModeChallenger#tableauTentative
 	 */
+	@Override
 	public void tentative() {
 
 		// Récupération de la réponse :
@@ -100,17 +113,17 @@ public class RechercheChallenger extends AbstractModeChallenger {
 					tableauTentative[i] = Character.getNumericValue(scanTentative.charAt(i));
 
 					// Vérification que se sont des chiffres de 0 à 9
-					for (int j = 0; j < tableauTentative.length; j++) {
-						if (tableauTentative[i] < 0 || tableauTentative[i] > 9) {
-							throw new Exception();
-						}
+					if (tableauTentative[i] < 0 || tableauTentative[i] > 9) {
+						throw new Exception();
 					}
 				}
+				
 				loopTour = false;
 				
 			} catch (Exception e) {
 				System.err.println("\nErreur : Veuillez rentrer un nombre de " + nbrDeCases + " chiffres de 0 à 9 !\n");				
-
+				LOG.error(ERRORUSER, e);
+				
 			} finally {
 				scan.nextLine();
 			}
@@ -121,6 +134,7 @@ public class RechercheChallenger extends AbstractModeChallenger {
 	/**
 	 * Compare la tentative avec la combinaison et affiche le résultat.
 	 */
+	@Override
 	public void testCombi() {
 
 		String resultat = "";

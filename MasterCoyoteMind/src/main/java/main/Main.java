@@ -19,6 +19,8 @@ package main;
 import java.util.Locale;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 
 import config.ImportConfig;
 import jeu.JeuMasterMind;
@@ -31,7 +33,7 @@ import jeu.JeuRecherche;
  * dispensés par l'école OpenClassroom.</p>
  * 
  * @author Coyote
- * @version 0.6.1
+ * @version 0.8.0
  */
 public class Main {
 
@@ -79,7 +81,15 @@ public class Main {
 	 * Création de l'objet Scanner qui sert à lire les entrées clavier de l'utilisateur.
 	 */
 	private static Scanner scan = new Scanner(System.in, "UTF-8");
-
+	/**
+	 * Création de l'objet Logger permettant la gestion des logs de l'application.
+	 */
+	private static final Logger LOG = LogManager.getLogger();
+	/**
+	 * String de constante pour les erreurs d'entrées clavier de l'utilisateur.
+	 */
+	private static final String ERRORUSER = "Erreur entrée clavier utilisateur";
+	
 	
 	/**
 	 * Fonction d'entrée de l'application (Main).
@@ -97,7 +107,15 @@ public class Main {
 	public static void main(String[] args) {
 
 		importConfig();
-
+		
+		// Gestion du mode developpeur par les paramètres du Main.
+		
+		if (args.length > 0) {
+			if ("dev".equalsIgnoreCase(args[0])) {
+				dev = true;
+			} 
+		}
+		
 		System.out.println("\nBienvenue dans le jeu :\n");
 		System.out.println(" ************************");
 		System.out.println(" * Master Coyote Mind ™ *");
@@ -173,10 +191,12 @@ public class Main {
 
 				} else {
 					System.err.println("\n Erreur : Le chiffre attendu est 1 ou 2 !");
+					LOG.error(ERRORUSER);
 				}
 
 			} catch (NoSuchElementException e) {
 				System.err.println("\nErreur : Veuillez rentrer un chiffre !");
+				LOG.error(ERRORUSER, e);
 
 			} finally {
 				scan.nextLine();
@@ -218,9 +238,11 @@ public class Main {
 					loop = false;
 				} else {
 					System.err.println("\nErreur : Le chiffre attendu est 1 , 2 ou 3 !");
+					LOG.error(ERRORUSER);
 				}
 			} catch (NoSuchElementException e) {
 				System.err.println("\nErreur : Veuillez rentrer un chiffre !");
+				LOG.error(ERRORUSER, e);
 
 			} finally {
 				scan.nextLine();
@@ -293,10 +315,12 @@ public class Main {
 					
 				} else {
 					System.err.println("\n Veuillez rentrer 'o' pour oui ou 'n' pour non !");
+					LOG.error(ERRORUSER);
 				}
 				
 			} catch (Exception e) {
 				System.err.println("\n Veuillez rentrer 'o' pour oui ou 'n' pour non !");
+				LOG.error(ERRORUSER, e);
 				
 			} finally {
 				scan.nextLine();

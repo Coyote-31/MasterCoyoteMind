@@ -18,6 +18,9 @@ package mode.mastermind;
 
 import java.security.SecureRandom;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import mode.AbstractModeChallenger;
 
 /**
@@ -40,6 +43,15 @@ public class MasterMindChallenger extends AbstractModeChallenger {
 	 * @see MasterMindChallenger#testCombi()
 	 */
 	private boolean[] tableauTestCombi;
+	/**
+	 * Création de l'objet Logger permettant la gestion des logs de l'application.
+	 */
+	private static final Logger LOG = LogManager.getLogger();
+	/**
+	 * String de constante pour les erreurs d'entrées clavier de l'utilisateur.
+	 */
+	private static final String ERRORUSER = "Erreur entrée clavier utilisateur";
+	
 	
 	/**
 	 * Constructeur de <i>MasterMindChallenger</i>.
@@ -81,6 +93,7 @@ public class MasterMindChallenger extends AbstractModeChallenger {
 	 * 
 	 * @see AbstractModeChallenger#tableauTentative
 	 */
+	@Override
 	public void tentative() {
 
 		// Récupération de la réponse :
@@ -106,17 +119,17 @@ public class MasterMindChallenger extends AbstractModeChallenger {
 					tableauTentative[i] = Character.getNumericValue(scanTentative.charAt(i));
 
 					// Vérification que se sont des chiffres de 0 à nbrDeCouleurs-1
-					for (int j = 0; j < tableauTentative.length; j++) {
-						if (tableauTentative[i] < 0 || tableauTentative[i] > (nbrDeCouleurs-1)) {
-							throw new Exception();
-						}
+					if (tableauTentative[i] < 0 || tableauTentative[i] > (nbrDeCouleurs-1)) {
+						throw new Exception();
 					}
 				}
+					
 				loopTour = false;
 				
 			} catch (Exception e) {
 				System.err.println("\nErreur : Veuillez rentrer un nombre de "
-						+ nbrDeCases + " chiffres de 0 à "+ (nbrDeCouleurs-1) +" !\n");				
+						+ nbrDeCases + " chiffres de 0 à "+ (nbrDeCouleurs-1) +" !\n");	
+				LOG.error(ERRORUSER, e);
 
 			} finally {
 				scan.nextLine();

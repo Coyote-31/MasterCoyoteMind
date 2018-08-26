@@ -56,6 +56,7 @@ public class JeuRecherche extends AbstractJeu {
 	 * @see AbstractJeu#modeDeJeu
 	 * @see AbstractJeu#mode
 	 */
+	@Override
 	public void init() {
 
 		switch (mode) {

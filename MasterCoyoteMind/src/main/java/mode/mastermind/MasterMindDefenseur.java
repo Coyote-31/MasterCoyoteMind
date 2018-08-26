@@ -20,6 +20,10 @@ import java.security.SecureRandom;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.LinkedList;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import mode.AbstractModeDefenseur;
 
 /**
@@ -54,6 +58,14 @@ public class MasterMindDefenseur extends AbstractModeDefenseur {
 	 * Stock la tentative pour la maj de la list de choix.
 	 */
 	private int[] tableauTestTentativeIA;
+	/**
+	 * Création de l'objet Logger permettant la gestion des logs de l'application.
+	 */
+	private static final Logger LOG = LogManager.getLogger();
+	/**
+	 * String de constante pour les erreurs d'entrées clavier de l'utilisateur.
+	 */
+	private static final String ERRORUSER = "Erreur entrée clavier utilisateur";
 	
 	
 	/**
@@ -80,6 +92,7 @@ public class MasterMindDefenseur extends AbstractModeDefenseur {
 	 * 
 	 * @see AbstractModeDefenseur#tableauCombinaisonIA	 
 	 */
+	@Override
 	public void combinaisonDefinition() {
 
 		String scanCombinaison = null;
@@ -103,18 +116,18 @@ public class MasterMindDefenseur extends AbstractModeDefenseur {
 					//convertion char => nombre
 					tableauCombinaisonIA[i] = Character.getNumericValue(scanCombinaison.charAt(i));
 					// Vérification que se sont des chiffres de 0 à nbrDeCouleurs-1.
-					for (int j = 0; j < tableauCombinaisonIA.length; j++) {
-						if (tableauCombinaisonIA[i] < 0 || tableauCombinaisonIA[i] > (nbrDeCouleurs-1)) {
-							throw new Exception();
-						}
+					if (tableauCombinaisonIA[i] < 0 || tableauCombinaisonIA[i] > (nbrDeCouleurs-1)) {
+						throw new Exception();
 					}
 				}
+					
 				loopTour = false;
 				
 			} catch (Exception e) {
 				System.err.println("\nErreur : Veuillez rentrer un nombre de " + nbrDeCases 
 						+ " chiffres de 0 à " + (nbrDeCouleurs-1) + " !\n");				
-
+				LOG.error(ERRORUSER, e);
+				
 			} finally {
 				scan.nextLine();
 			}
@@ -125,6 +138,7 @@ public class MasterMindDefenseur extends AbstractModeDefenseur {
 	/**
 	 * Décrit la tentative de l'IA pour trouver la combinaison.
 	 */
+	@Override
 	public void tourIA() {
 		
 		if(dev) {
@@ -174,6 +188,7 @@ public class MasterMindDefenseur extends AbstractModeDefenseur {
 	/**
 	 * Compare la tentative de l'IA avec la combinaison et affiche le résultat.
 	 */
+	@Override
 	public void testCombiIA() {
 
 		int present = 0;
