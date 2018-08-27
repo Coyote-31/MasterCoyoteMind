@@ -2,7 +2,6 @@ package config;
 
 import java.io.File;
 import java.io.IOException;
-
 import javax.xml.XMLConstants;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -93,7 +92,10 @@ public class ImportConfig {
 			
 			// Affectation de notre objet au document pour interception des erreurs éventuelles
 			builder.setErrorHandler(errHandler);
-			File fileXML = new File("./src/main/resources/configProperties.xml");
+			
+			//Problème résolut avec le lancement en .jar
+			ClassLoader classLoader = getClass().getClassLoader();
+			File fileXML = new File(classLoader.getResource("./src/main/resources/configProperties.xml").getFile());
 			
 			Document xml = builder.parse(fileXML);
 			Element root = xml.getDocumentElement();
@@ -185,7 +187,12 @@ public class ImportConfig {
 
 			
 			DOMSource source = new DOMSource(doc);
-			StreamResult result = new StreamResult(new File("./src/main/resources/configProperties.xml"));
+			
+			//Resout le problème de lancement en .jar
+			ClassLoader classLoader = getClass().getClassLoader();
+			StreamResult result = new StreamResult(new File(
+					classLoader.getResource("./src/main/resources/configProperties.xml").getFile()));
+			
 
 			// Output vers la console pour debug :
 			if(dev) {

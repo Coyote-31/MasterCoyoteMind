@@ -4,5 +4,5 @@
     <nbrdecases value="4"/>
     <nbressais value="10"/>
     <nbrdecouleurs value="6"/>
-    <dev value="true"/>
+    <dev value="false"/>
 </properties>

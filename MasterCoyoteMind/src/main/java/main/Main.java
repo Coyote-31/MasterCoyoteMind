@@ -33,7 +33,7 @@ import jeu.JeuRecherche;
  * dispensés par l'école OpenClassroom.</p>
  * 
  * @author Coyote
- * @version 0.8.0
+ * @version 1.0.0
  */
 public class Main {
 
